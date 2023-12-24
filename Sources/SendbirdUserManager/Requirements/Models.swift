@@ -46,6 +46,30 @@ public struct SBUser: Codable {
     public var userId: String
     public var nickname: String?
     public var profileURL: String?
+    
+    enum CodingKeys: String, CodingKey {
+        case userId = "user_id"
+        case nickname = "nickname"
+        case profileURL = "profile_url"
+    }
+}
+
+public struct SBUsertests: Codable {
+    
+    public init(
+        user_id: Int? = nil,
+        nickname: String? = nil,
+        profile_url: String? = nil
+    ) {
+        
+        self.user_id = user_id
+        self.nickname = nickname
+        self.profile_url = profile_url
+    }
+
+    public var user_id: Int?
+    public var nickname: String?
+    public var profile_url: String?
 }
 
 

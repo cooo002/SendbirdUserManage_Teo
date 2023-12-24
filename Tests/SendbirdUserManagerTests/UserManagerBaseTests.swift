@@ -15,21 +15,22 @@ import XCTest
 open class UserManagerBaseTests: XCTestCase {
     
     open func userManagerType() -> SBUserManager.Type! {
-        return nil
+        
+        return SBUserManagerImpl.self
     }
     
     public func testInitApplicationWithDifferentAppIdClearsData() {
         let userManager = userManagerType().init()
         
         // First init
-        userManager.initApplication(applicationId: "AppID1", apiToken: "Token1")
+        userManager.initApplication(applicationId: "A7D574F1-40DD-4B8E-9D73-9317BA74E65B", apiToken: "275b933f8389c107b0be683c4b63ff209a11bdf1")
         
         let userId = UUID().uuidString
         let initialUser = UserCreationParams(userId: userId, nickname: "Initial", profileURL: nil)
         userManager.createUser(params: initialUser) { _ in }
         
         // Second init with a different App ID
-        userManager.initApplication(applicationId: "AppID2", apiToken: "Token2")
+        userManager.initApplication(applicationId: "A7D574F1-40DD-4B8E-9D73-9317BA74E65B", apiToken: "275b933f8389c107b0be683c4b63ff209a11bdf1")
         
         // Check if the data is cleared
         let users = userManager.userStorage.getUsers()

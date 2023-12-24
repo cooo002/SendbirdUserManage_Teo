@@ -10,7 +10,7 @@
 import Foundation
 
 class SBUserStorageImpl: SBUserStorage {
-
+    
     private var cacheManager: CacheManagerImpl<SBUser>
     
     required init() {
@@ -20,8 +20,8 @@ class SBUserStorageImpl: SBUserStorage {
     
     func upsertUser(_ user: SBUser) {
         
-        self.cacheManager.upsertToMemoryCache(key: user.userId, value: user)
-        self.cacheManager.upsertToDiskCache(key: user.userId, value: user)
+        self.cacheManager.upsertToMemoryCache(key: String(user.userId), value: user)
+        self.cacheManager.upsertToDiskCache(key: String(user.userId), value: user)
     }
     
     func getUsers() -> [SBUser] {
@@ -77,5 +77,11 @@ class SBUserStorageImpl: SBUserStorage {
         }
         
         return nil
+    }
+    
+    func clearUserCacheData() {
+        
+        cacheManager.clearDiskCache()
+        cacheManager.clearMemoryCache()
     }
 }

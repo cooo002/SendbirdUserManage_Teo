@@ -7,6 +7,8 @@
 
 import Foundation
 
+
+
 public protocol Request {
     associatedtype Response: Decodable
     
@@ -15,6 +17,7 @@ public protocol Request {
     var path: APIPath { get set }
     var parmater: String? { get set }
     var body: APIBody? { get set }
+    var apiToken: String { get set }
 }
 
 public enum APIMethod: String{
@@ -25,20 +28,37 @@ public enum APIMethod: String{
     case DELETE
 }
 
-public enum APIPath: String{
+public enum APIPath{
     
-    case user = "/users"
+    case user(userId: String?)
+    
+    var path: String{
+        
+        switch self {
+            
+        case .user(let userId):
+            
+            if let userId = userId{
+                
+                let userIdPath = "/\(userId)"
+                
+                return "/users\(userIdPath)"
+            }
+            
+            return "/users"
+        }
+    }
 }
 
 public struct APIBody: Codable{
     
-    let userId: String
-    let nickname: String
-    let profileURL: String?
+    let user_id: String
+    let nickname: String?
+    let profile_url: String?
 }
 
 struct APIRequest<T: Decodable>: Request{
-
+    
     public typealias Response = T
     
     var url: String
@@ -46,12 +66,13 @@ struct APIRequest<T: Decodable>: Request{
     var path: APIPath
     var parmater: String?
     var body: APIBody?
+    var apiToken: String
 }
 
 public struct APIResponseData: Codable{
     
     public var users: [SBUser]?
-    public var next: String
+    public var next: String?
 }
 
 public protocol SBNetworkClient {

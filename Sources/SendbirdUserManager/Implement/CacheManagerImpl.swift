@@ -139,3 +139,26 @@ extension CacheManagerImpl{
         }
     }
 }
+
+extension CacheManagerImpl{
+    
+    func clearMemoryCache() {
+        cacheManagerQueue.async(flags: .barrier) { [self] in
+            memoryCache.removeAll()
+        }
+    }
+    
+    func clearDiskCache() {
+        cacheManagerQueue.async(flags: .barrier) {
+            do {
+                let fileURLs = try FileManager.default.contentsOfDirectory(at: self.diskCacheDirectory, includingPropertiesForKeys: nil)
+                
+                for fileURL in fileURLs {
+                    try? FileManager.default.removeItem(at: fileURL)
+                }
+            } catch {
+                // Handle the error if necessary
+            }
+        }
+    }
+}

@@ -17,7 +17,7 @@ class SBNetworkClientImpl: SBNetworkClient {
         request: R,
         completionHandler: @escaping (Result<R.Response, Error>) -> Void
     ) {
-        let urlStr = request.url + request.path.rawValue + (request.parmater ?? "")
+        let urlStr = request.url + request.path.path + (request.parmater ?? "")
         
         guard let url = URL(string: urlStr) else {
             completionHandler(.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
@@ -31,7 +31,7 @@ class SBNetworkClientImpl: SBNetworkClient {
             forHTTPHeaderField: "Content-Type"
         )
         urlRequest.setValue(
-            "275b933f8389c107b0be683c4b63ff209a11bdf1",
+            request.apiToken,
             forHTTPHeaderField: "Api-Token"
         )
         
@@ -58,7 +58,7 @@ class SBNetworkClientImpl: SBNetworkClient {
                 completionHandler(.failure(error))
             } else if let data = data {
                 do {
-                    
+                    print("request response \(data)")
                     // 서버 응답 데이터를 디코드
                     let decodedResponse = try JSONDecoder().decode(R.Response.self, from: data)
                     

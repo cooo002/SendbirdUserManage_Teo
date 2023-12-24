@@ -7,6 +7,12 @@
 
 import Foundation
 
+enum UserManagerError: Error{
+    
+    case emptyParams
+    case createPartialFailure
+}
+
 public typealias UserResult = Result<(SBUser), Error>
 public typealias UsersResult = Result<[SBUser], Error>
 
